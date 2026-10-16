@@ -27,27 +27,32 @@ a{color:inherit}
 
 /* Opening: a boy walks into the spotlight, waves and invites you to explore, then the curtain opens */
 #open{position:fixed;inset:0;z-index:100;pointer-events:all}
-#open .h{position:absolute;left:0;right:0;height:50.2%;background:var(--black);transition:transform .9s var(--ease) 3.6s;z-index:5}
+#open .h{position:absolute;left:0;right:0;height:50.2%;background:var(--black);transition:transform .55s var(--ease);z-index:0}
 #open .h.u{top:0}#open .h.d{bottom:0}
 #open.go .h.u{transform:translateY(-101%)}#open.go .h.d{transform:translateY(101%)}
 #open .ln{position:absolute;left:0;right:0;top:calc(50% - 1px);height:2px;background:var(--gold);z-index:7;transform:scaleX(0);animation:draw .6s var(--ease) .1s forwards,vanish .25s ease .9s forwards}
 #open .vg{position:absolute;inset:0;z-index:2;background:radial-gradient(ellipse at center,transparent 30%,#000 100%);pointer-events:none}
 #open .gr{position:absolute;inset:-50%;z-index:8;opacity:.2;pointer-events:none;background:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='200' height='200'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.9' numOctaves='2'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");animation:grain .4s steps(4) infinite}
 #open .cone{position:absolute;top:0;bottom:0;left:50%;width:min(130vw,900px);transform:translateX(-50%);background:linear-gradient(to bottom,rgba(232,226,210,.16),rgba(232,226,210,.02));clip-path:polygon(46% 0,54% 0,100% 100%,0 100%);opacity:0;animation:fin .8s ease .3s forwards;z-index:1}
-#open .t{position:absolute;inset:0;display:grid;place-items:center;text-align:center;z-index:3;animation:push 4.4s linear forwards;transition:opacity .35s ease 3.5s}
+#open .t{position:absolute;inset:0;display:grid;place-items:center;text-align:center;z-index:3;transition:opacity .2s ease}
 #open.go .t{opacity:0}
 #open .t>div{display:flex;flex-direction:column;align-items:center}
 #open .t em{font:italic 500 1.2rem 'Cormorant Garamond',serif;color:var(--dim);margin-bottom:.6rem;opacity:0;animation:fin .5s ease .3s forwards}
 #open .t b{display:flex;justify-content:center;font:900 clamp(2rem,11.5vw,6rem)/1.25 'Cinzel',serif}
 #open .l{display:inline-block;overflow:hidden;padding:0 .015em}
 #open .l i{display:inline-block;font-style:normal;color:var(--gold);transform:translateY(115%);animation:rise .7s var(--ease) forwards,tone .6s ease forwards;animation-delay:calc(.5s + var(--i)*.07s),calc(1.1s + var(--i)*.06s)}
-.sc{position:relative;margin-top:6.2rem}
-.boy{display:block;height:min(38vh,270px);width:auto;opacity:0;animation:enter .9s var(--ease) .6s forwards}
-.arm{transform-origin:146px 150px;animation:wave .42s ease-in-out 1.2s 6 alternate}
+.sc{position:relative;margin-top:5.5rem}
+.boy{display:block;height:min(38vh,270px);width:auto;opacity:0;animation:enter .5s var(--ease) .1s forwards}
+.arm{transform-origin:146px 150px;animation:wave .42s ease-in-out .5s 4 alternate}
 .bub{position:absolute;left:50%;top:-5.2rem;background:var(--bone);color:#000;font:italic 600 1.45rem/1.15 'Cormorant Garamond',serif;padding:.55rem 1rem;border-radius:16px;opacity:0;transform:scale(.3);transform-origin:50% 100%;width:11rem;margin-left:-5.5rem}
 .bub::after{content:"";position:absolute;left:50%;bottom:-11px;margin-left:-8px;border:8px solid transparent;border-top:11px solid var(--bone);border-bottom:0}
-.b1{animation:pop .35s cubic-bezier(.3,1.6,.5,1) 1.2s forwards,out .25s ease 2.3s forwards}
-.b2{width:14rem;margin-left:-7rem;animation:pop .4s cubic-bezier(.3,1.6,.5,1) 2.5s forwards}
+.b1{width:min(80vw,19rem);margin-left:0;left:50%;translate:-50% 0;animation:pop .35s cubic-bezier(.3,1.6,.5,1) .3s forwards}
+.intro-actions{display:flex;align-items:center;gap:1rem;margin-top:1.2rem}
+#explore-intro{cursor:pointer;font-size:.95rem}
+#hear-intro{background:none;border:0;border-bottom:1px solid var(--dim);color:var(--bone);font:italic 500 1.1rem 'Cormorant Garamond',serif;cursor:pointer;padding:.5rem}
+.intro-note{font-size:1rem;color:var(--dim);margin-top:.6rem}
+body.intro-active{overflow:hidden}
+@media(max-height:600px){#open .t b{font-size:2rem}.sc{margin-top:4.5rem}.boy{height:30vh}.intro-actions{margin-top:.5rem}}
 @keyframes draw{to{transform:scaleX(1)}}@keyframes vanish{to{opacity:0}}
 @keyframes rise{to{transform:none}}@keyframes tone{to{color:var(--bone)}}
 @keyframes fin{to{opacity:1}}@keyframes push{to{transform:scale(1.06)}}
@@ -141,17 +146,19 @@ body::before{left:5px}body::after{right:5px}
 </head>
 <body>
 
-<!-- Opening title card (plays once, ~2.3s) -->
-<div id="open" aria-hidden="true">
+<!-- Short greeting; Explore opens the portfolio. -->
+<div id="open" role="dialog" aria-modal="true" aria-label="Welcome to Waheth’s portfolio">
   <div class="h u"></div><div class="h d"></div><div class="ln"></div><div class="cone"></div><div class="vg"></div><div class="gr"></div>
   <div class="t"><div><em>A film by</em><b id="ttl">WAHETH.S</b>
-   <div class="sc"><span class="bub b1">Hi!</span><span class="bub b2">Come, let&rsquo;s explore!</span>
+   <div class="sc"><span class="bub b1">Hi, my name is Waheth!</span>
     <svg class="boy" viewBox="0 0 200 280" aria-hidden="true">
      <ellipse cx="100" cy="270" rx="58" ry="7" fill="#1d1b16"/>
      <rect x="72" y="202" width="22" height="62" rx="8" fill="#26231c" stroke="#e8e2d2" stroke-width="2"/>
      <rect x="106" y="202" width="22" height="62" rx="8" fill="#26231c" stroke="#e8e2d2" stroke-width="2"/>
      <ellipse cx="80" cy="266" rx="17" ry="7" fill="#e8e2d2"/><ellipse cx="120" cy="266" rx="17" ry="7" fill="#e8e2d2"/>
      <rect x="58" y="138" width="84" height="76" rx="16" fill="#d4a53c"/>
+     <rect x="80" y="163" width="40" height="27" rx="6" fill="#26231c"/>
+     <text x="100" y="182" text-anchor="middle" font-family="Georgia,serif" font-size="17" fill="#e8e2d2">AI</text>
      <rect x="38" y="146" width="20" height="58" rx="10" fill="#d4a53c"/><circle cx="48" cy="208" r="10" fill="#e8e2d2"/>
      <g class="arm"><rect x="136" y="88" width="20" height="68" rx="10" fill="#d4a53c"/><circle cx="146" cy="84" r="12" fill="#e8e2d2"/></g>
      <rect x="92" y="122" width="16" height="22" fill="#e8e2d2"/>
@@ -161,7 +168,10 @@ body::before{left:5px}body::after{right:5px}
      <path d="M85 112Q100 128 115 112" stroke="#000" stroke-width="3.5" fill="none" stroke-linecap="round"/>
      <circle cx="76" cy="110" r="6" fill="#d4a53c" opacity=".45"/><circle cx="124" cy="110" r="6" fill="#d4a53c" opacity=".45"/>
     </svg>
-   </div></div></div>
+   </div>
+   <div class="intro-actions"><button class="btn p" id="explore-intro" type="button">Explore &rarr;</button><button id="hear-intro" type="button" hidden>Hear greeting</button></div>
+   <p class="intro-note">A little hello. Your next scene starts here.</p>
+   </div></div>
 </div>
 <button id="skip" type="button">Skip</button>
 
@@ -276,13 +286,39 @@ body::before{left:5px}body::after{right:5px}
 
  /* Opening */
  var tt=$('#ttl');tt.innerHTML=tt.textContent.split('').map(function(c,i){return '<span class="l"><i style="--i:'+i+'">'+c+'</i></span>'}).join('');
- var op=$('#open'),skip=$('#skip'),closed=false;
- function endOpen(){if(closed)return;closed=true;op.classList.add('done')}
- if(reduce){endOpen()}else{
-  requestAnimationFrame(function(){requestAnimationFrame(function(){op.classList.add('go')})});
-  setTimeout(endOpen,4600);
+ var op=$('#open'),skip=$('#skip'),closed=false,explore=$('#explore-intro'),main=$('main');
+ var greeting="Hi, my name is Waheth! Welcome to my portfolio. Let's explore.";
+ function endOpen(continueStory){
+  if(closed)return;closed=true;
+  if('speechSynthesis' in window)window.speechSynthesis.cancel();
+  op.classList.add('go');skip.hidden=true;
+  setTimeout(function(){
+   op.classList.add('done');document.body.classList.remove('intro-active');main.inert=false;
+   var target=continueStory?$('#about'):$('#home');
+   target.setAttribute('tabindex','-1');target.focus({preventScroll:true});
+   if(continueStory)target.scrollIntoView({behavior:reduce?'auto':'smooth'});
+  },reduce?0:550);
  }
- skip.addEventListener('click',endOpen);
+ if(reduce){op.classList.add('done');skip.hidden=true;closed=true}else{
+  document.body.classList.add('intro-active');main.inert=true;explore.focus();
+ }
+ explore.addEventListener('click',function(){endOpen(true)});
+ skip.addEventListener('click',function(){endOpen(false)});
+ op.addEventListener('keydown',function(e){
+  if(e.key==='Escape'){e.preventDefault();endOpen(false)}
+  if(e.key==='Tab'){
+   var controls=[explore];if(!$('#hear-intro').hidden)controls.push($('#hear-intro'));controls.push(skip);
+   var index=controls.indexOf(document.activeElement);
+   e.preventDefault();controls[(index+(e.shiftKey?-1:1)+controls.length)%controls.length].focus();
+  }
+ });
+ skip.addEventListener('keydown',function(e){if(e.key==='Tab'){e.preventDefault();(e.shiftKey&&!$('#hear-intro').hidden?$('#hear-intro'):explore).focus()}if(e.key==='Escape')endOpen(false)});
+ if('speechSynthesis' in window && 'SpeechSynthesisUtterance' in window){
+  var hear=$('#hear-intro');hear.hidden=false;
+  hear.addEventListener('click',function(){
+   window.speechSynthesis.cancel();var voice=new SpeechSynthesisUtterance(greeting);voice.rate=1.05;window.speechSynthesis.speak(voice);
+  });
+ }
 
  /* Timecode: counts up while you read */
  var t0=Date.now(),tc=$('#tc');
