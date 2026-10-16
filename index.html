@@ -1,0 +1,324 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>WAHETH.S — Portfolio</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@600;900&family=Cormorant+Garamond:ital,wght@0,500;0,600;1,500&display=swap" rel="stylesheet">
+<style>
+/* Palette: screen black, bone (text), marquee gold (accent). Change here. */
+:root{--black:#000;--bone:#e8e2d2;--dim:#8d887b;--gold:#d4a53c;--bar:clamp(44px,9vh,76px);--ease:cubic-bezier(.76,0,.24,1)}
+*{box-sizing:border-box;margin:0;padding:0}
+html{scroll-behavior:smooth;background:var(--black)}
+body{background:var(--black);color:var(--bone);font:500 1.3rem/1.65 'Cormorant Garamond',Georgia,serif;padding:var(--bar) 0;overflow-x:hidden}
+:focus-visible{outline:2px solid var(--gold);outline-offset:3px}
+a{color:inherit}
+.disp{font-family:'Cinzel',Georgia,serif;font-weight:900;line-height:1.05;text-transform:uppercase;letter-spacing:.02em}
+.wrap{padding:0 6vw}
+
+/* Letterbox bars (signature move: bars carry live scene caption + timecode) */
+.bar{position:fixed;left:0;right:0;height:var(--bar);background:var(--black);z-index:50;display:flex;align-items:center;justify-content:space-between;padding:0 6vw;font:700 .8rem/1 'Cinzel',Georgia,serif;letter-spacing:.18em;color:var(--dim);text-transform:uppercase}
+.bar.t{top:0;border-bottom:1px solid #1d1b16}.bar.b{bottom:0;border-top:1px solid #1d1b16}
+.bar .cap{font:italic 500 1.05rem/1.2 'Cormorant Garamond',Georgia,serif;letter-spacing:0;text-transform:none;color:var(--bone);transition:opacity .35s}
+.bar .cap.swap{opacity:0}
+#tc{color:var(--gold);font-variant-numeric:tabular-nums}
+
+/* Opening: a boy walks into the spotlight, waves and invites you to explore, then the curtain opens */
+#open{position:fixed;inset:0;z-index:100;pointer-events:all}
+#open .h{position:absolute;left:0;right:0;height:50.2%;background:var(--black);transition:transform .9s var(--ease) 3.6s;z-index:5}
+#open .h.u{top:0}#open .h.d{bottom:0}
+#open.go .h.u{transform:translateY(-101%)}#open.go .h.d{transform:translateY(101%)}
+#open .ln{position:absolute;left:0;right:0;top:calc(50% - 1px);height:2px;background:var(--gold);z-index:7;transform:scaleX(0);animation:draw .6s var(--ease) .1s forwards,vanish .25s ease .9s forwards}
+#open .vg{position:absolute;inset:0;z-index:2;background:radial-gradient(ellipse at center,transparent 30%,#000 100%);pointer-events:none}
+#open .gr{position:absolute;inset:-50%;z-index:8;opacity:.2;pointer-events:none;background:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='200' height='200'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.9' numOctaves='2'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");animation:grain .4s steps(4) infinite}
+#open .cone{position:absolute;top:0;bottom:0;left:50%;width:min(130vw,900px);transform:translateX(-50%);background:linear-gradient(to bottom,rgba(232,226,210,.16),rgba(232,226,210,.02));clip-path:polygon(46% 0,54% 0,100% 100%,0 100%);opacity:0;animation:fin .8s ease .3s forwards;z-index:1}
+#open .t{position:absolute;inset:0;display:grid;place-items:center;text-align:center;z-index:3;animation:push 4.4s linear forwards;transition:opacity .35s ease 3.5s}
+#open.go .t{opacity:0}
+#open .t>div{display:flex;flex-direction:column;align-items:center}
+#open .t em{font:italic 500 1.2rem 'Cormorant Garamond',serif;color:var(--dim);margin-bottom:.6rem;opacity:0;animation:fin .5s ease .3s forwards}
+#open .t b{display:flex;justify-content:center;font:900 clamp(2rem,11.5vw,6rem)/1.25 'Cinzel',serif}
+#open .l{display:inline-block;overflow:hidden;padding:0 .015em}
+#open .l i{display:inline-block;font-style:normal;color:var(--gold);transform:translateY(115%);animation:rise .7s var(--ease) forwards,tone .6s ease forwards;animation-delay:calc(.5s + var(--i)*.07s),calc(1.1s + var(--i)*.06s)}
+.sc{position:relative;margin-top:6.2rem}
+.boy{display:block;height:min(38vh,270px);width:auto;opacity:0;animation:enter .9s var(--ease) .6s forwards}
+.arm{transform-origin:146px 150px;animation:wave .42s ease-in-out 1.2s 6 alternate}
+.bub{position:absolute;left:50%;top:-5.2rem;background:var(--bone);color:#000;font:italic 600 1.45rem/1.15 'Cormorant Garamond',serif;padding:.55rem 1rem;border-radius:16px;opacity:0;transform:scale(.3);transform-origin:50% 100%;width:11rem;margin-left:-5.5rem}
+.bub::after{content:"";position:absolute;left:50%;bottom:-11px;margin-left:-8px;border:8px solid transparent;border-top:11px solid var(--bone);border-bottom:0}
+.b1{animation:pop .35s cubic-bezier(.3,1.6,.5,1) 1.2s forwards,out .25s ease 2.3s forwards}
+.b2{width:14rem;margin-left:-7rem;animation:pop .4s cubic-bezier(.3,1.6,.5,1) 2.5s forwards}
+@keyframes draw{to{transform:scaleX(1)}}@keyframes vanish{to{opacity:0}}
+@keyframes rise{to{transform:none}}@keyframes tone{to{color:var(--bone)}}
+@keyframes fin{to{opacity:1}}@keyframes push{to{transform:scale(1.06)}}
+@keyframes enter{from{opacity:0;transform:translateY(46px)}to{opacity:1;transform:none}}
+@keyframes wave{from{transform:rotate(-14deg)}to{transform:rotate(24deg)}}
+@keyframes pop{from{opacity:0;transform:scale(.3)}to{opacity:1;transform:none}}
+@keyframes out{to{opacity:0;transform:scale(.6)}}
+@keyframes grain{25%{transform:translate(-3%,2%)}50%{transform:translate(2%,-3%)}75%{transform:translate(-2%,-1%)}}
+#skip{position:fixed;right:5vw;bottom:calc(var(--bar) + 10px);z-index:120;background:none;border:1px solid var(--dim);color:var(--bone);font:700 .8rem 'Cinzel',Georgia,serif;letter-spacing:.18em;padding:.55rem 1rem;cursor:pointer;text-transform:uppercase}
+#skip:hover{border-color:var(--gold);color:var(--gold)}
+#open.done,#open.done~#skip{display:none}
+
+/* Scenes */
+section{padding:clamp(5rem,14vh,9rem) 0;min-height:70vh;position:relative;overflow:hidden}
+section::before{content:attr(data-n);position:absolute;right:-1vw;top:1rem;font:900 min(60vw,34rem)/1 'Cinzel',serif;color:transparent;-webkit-text-stroke:1px #2a2619;pointer-events:none}
+.wrap{position:relative;z-index:1}
+h2::after{content:'';display:block;width:5rem;height:2px;background:var(--gold);margin-top:1.8rem}
+h2{font-size:clamp(2.2rem,9.5vw,5.6rem);color:var(--bone);margin-bottom:2.5rem}
+h2 small{display:block;font:italic 500 1.1rem/1.4 'Cormorant Garamond',Georgia,serif;text-transform:none;color:var(--gold);margin-bottom:1rem;letter-spacing:0}
+p+p{margin-top:1.2rem}
+
+/* Landing */
+#home{min-height:calc(100vh - 2*var(--bar));display:flex;flex-direction:column;justify-content:flex-end;padding:3rem 0 4rem}
+.by{color:var(--dim);font-style:italic;margin-bottom:1rem}
+h1{font-size:clamp(2.3rem,12.4vw,11rem);letter-spacing:.03em;color:var(--bone);margin-left:-.04em}
+h1 span{color:var(--gold)}
+.mono{width:84px;margin:2rem 0 1.5rem;cursor:pointer;display:block;background:none;border:0}
+.tag{font-size:clamp(1.3rem,4.6vw,2rem);line-height:1.3;max-width:20ch;font-style:italic}
+.now{margin-top:1rem;color:var(--dim)}.now b{color:var(--gold);font-weight:500}
+.btns{display:flex;gap:1rem;flex-wrap:wrap;margin-top:2.2rem}
+.btn{font:900 1.1rem 'Cinzel',Georgia,serif;letter-spacing:.14em;text-transform:uppercase;text-decoration:none;padding:.9rem 1.6rem;border:1px solid var(--bone);transition:background .3s var(--ease),color .3s var(--ease),border-color .3s}
+.btn.p{background:var(--gold);border-color:var(--gold);color:var(--black)}
+.btn:hover{background:var(--bone);color:var(--black);border-color:var(--bone)}
+
+/* About */
+.about{max-width:34rem;margin-left:0}
+.about p:first-child::first-letter{font:900 4.6rem/.8 'Cinzel',Georgia,serif;float:left;padding:.35rem .6rem 0 0;color:var(--gold)}
+@media(min-width:800px){.about{margin-left:26vw}}
+
+/* Skills = end-credits with dotted leaders */
+.cred{list-style:none;max-width:44rem}
+.cred li{display:flex;align-items:baseline;gap:.6rem;padding:.35rem 0}
+.cred .r{font:italic 500 1rem 'Cormorant Garamond',Georgia,serif;color:var(--gold);min-width:6.2rem}
+.cred .d{flex:1;border-bottom:1px dotted #4a463c;transform:translateY(-.3rem)}
+.cred .n{font:600 1.15rem 'Cinzel',Georgia,serif;letter-spacing:.06em;text-transform:uppercase;text-align:right}
+.cred+h3{margin-top:2.5rem}
+h3{font:italic 500 1.15rem 'Cormorant Garamond',Georgia,serif;color:var(--dim);margin:2.5rem 0 .6rem}
+
+/* Journey = three reels, uneven widths */
+.reels{display:grid;gap:3rem;grid-template-columns:1fr}
+.reel h3{font:900 clamp(1.5rem,5vw,2.1rem)/1 'Cinzel',Georgia,serif;color:var(--gold);text-transform:uppercase;margin:0 0 .8rem}
+.reel p{font-size:1.05rem}
+@media(min-width:800px){.reels{grid-template-columns:1.3fr 1fr 1.6fr;gap:4rem}.reel:nth-child(2){margin-top:5rem}}
+
+.reel{border:1px solid #2a2619;padding:1.6rem 1.4rem;background:#0b0a08;position:relative}
+.reel::before,.reel::after{content:'';position:absolute;width:14px;height:14px;border:2px solid var(--gold)}
+.reel::before{top:-1px;left:-1px;border-right:0;border-bottom:0}.reel::after{bottom:-1px;right:-1px;border-left:0;border-top:0}
+body::before,body::after{content:'';position:fixed;top:var(--bar);bottom:var(--bar);width:9px;z-index:40;pointer-events:none;background:repeating-linear-gradient(to bottom,#2a2619 0 12px,transparent 12px 26px)}
+body::before{left:5px}body::after{right:5px}
+.grain{position:fixed;inset:0;z-index:45;pointer-events:none;opacity:.07;background:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='200' height='200'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.8' numOctaves='2'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E")}
+.bar.t::after{content:'';position:absolute;left:0;bottom:-1px;height:2px;width:var(--p,0%);background:var(--gold)}
+#home::after{content:'';position:absolute;top:0;right:0;width:min(90vw,700px);height:80%;background:linear-gradient(to bottom,rgba(232,226,210,.09),transparent);clip-path:polygon(70% 0,100% 0,100% 100%,0 100%);pointer-events:none}
+#home{background:radial-gradient(circle 340px at var(--mx,70%) var(--my,30%),rgba(212,165,60,.07),transparent)}
+/* Beyond code = outtakes */
+.out{list-style:none;max-width:40rem}
+.out li{padding:1.1rem 0 1.1rem 1.2rem;border-left:3px solid var(--gold);margin-bottom:1.4rem}
+.out li:nth-child(even){margin-left:clamp(0px,8vw,6rem);border-left-color:var(--dim)}
+.out strong{font:600 1.15rem 'Cinzel',Georgia,serif;letter-spacing:.06em;text-transform:uppercase;display:block}
+
+/* Contact = rolling credits */
+.roll a{display:block;font:900 clamp(1.5rem,7vw,3.6rem)/1.15 'Cinzel',Georgia,serif;text-transform:uppercase;text-decoration:none;padding:.5rem 0;border-bottom:1px solid #26231c;overflow-wrap:anywhere;transition:color .3s,padding-left .5s var(--ease)}
+.roll a span{display:block;font:italic 500 1rem 'Cormorant Garamond',Georgia,serif;color:var(--gold);text-transform:none;margin-bottom:.2rem}
+.roll a:hover{color:var(--gold);padding-left:1.2rem}
+.end{margin-top:6rem;text-align:center;font:900 clamp(3rem,15vw,9rem)/1.1 'Cinzel',Georgia,serif;color:#1d1b16;letter-spacing:.1em}
+
+/* Easter egg: clapperboard */
+#clap{position:fixed;inset:0;z-index:200;background:rgba(0,0,0,.94);display:none;place-items:center}
+#clap.on{display:grid}
+.board{width:min(84vw,420px);background:#111;border:3px solid var(--bone);padding:0 0 1.2rem;position:relative;animation:shake .35s ease .45s}
+.board .st{height:34px;margin:-3px -3px 0;border:3px solid var(--bone);background:repeating-linear-gradient(115deg,var(--bone) 0 22px,#000 22px 44px);transform-origin:0 100%;transform:rotate(-24deg);animation:slap .5s cubic-bezier(.6,0,1,.6) .1s forwards}
+.board p{font:700 1.4rem 'Cinzel',Georgia,serif;letter-spacing:.08em;text-transform:uppercase;padding:.7rem 1.2rem 0;border-bottom:1px solid #333;margin:0}
+.board p em{font:italic 500 1rem 'Cormorant Garamond',Georgia,serif;color:var(--gold);text-transform:none;display:block;letter-spacing:0}
+@keyframes slap{to{transform:rotate(0)}}
+@keyframes shake{25%{transform:translate(4px,-3px)}60%{transform:translate(-3px,2px)}}
+
+@media(prefers-reduced-motion:reduce){
+ html{scroll-behavior:auto}*{animation-duration:.01ms!important;animation-delay:0s!important;transition-duration:.01ms!important;transition-delay:0s!important}
+ #open,#skip{display:none}
+}
+</style>
+</head>
+<body>
+
+<!-- Opening title card (plays once, ~2.3s) -->
+<div id="open" aria-hidden="true">
+  <div class="h u"></div><div class="h d"></div><div class="ln"></div><div class="cone"></div><div class="vg"></div><div class="gr"></div>
+  <div class="t"><div><em>A film by</em><b id="ttl">WAHETH.S</b>
+   <div class="sc"><span class="bub b1">Hi!</span><span class="bub b2">Come, let&rsquo;s explore!</span>
+    <svg class="boy" viewBox="0 0 200 280" aria-hidden="true">
+     <ellipse cx="100" cy="270" rx="58" ry="7" fill="#1d1b16"/>
+     <rect x="72" y="202" width="22" height="62" rx="8" fill="#26231c" stroke="#e8e2d2" stroke-width="2"/>
+     <rect x="106" y="202" width="22" height="62" rx="8" fill="#26231c" stroke="#e8e2d2" stroke-width="2"/>
+     <ellipse cx="80" cy="266" rx="17" ry="7" fill="#e8e2d2"/><ellipse cx="120" cy="266" rx="17" ry="7" fill="#e8e2d2"/>
+     <rect x="58" y="138" width="84" height="76" rx="16" fill="#d4a53c"/>
+     <rect x="38" y="146" width="20" height="58" rx="10" fill="#d4a53c"/><circle cx="48" cy="208" r="10" fill="#e8e2d2"/>
+     <g class="arm"><rect x="136" y="88" width="20" height="68" rx="10" fill="#d4a53c"/><circle cx="146" cy="84" r="12" fill="#e8e2d2"/></g>
+     <rect x="92" y="122" width="16" height="22" fill="#e8e2d2"/>
+     <circle cx="100" cy="92" r="38" fill="#e8e2d2"/>
+     <path d="M61 90Q58 46 100 46Q142 46 139 90Q128 68 100 70Q74 70 61 90Z" fill="#4a4336"/>
+     <circle cx="86" cy="98" r="4.5" fill="#000"/><circle cx="114" cy="98" r="4.5" fill="#000"/>
+     <path d="M85 112Q100 128 115 112" stroke="#000" stroke-width="3.5" fill="none" stroke-linecap="round"/>
+     <circle cx="76" cy="110" r="6" fill="#d4a53c" opacity=".45"/><circle cx="124" cy="110" r="6" fill="#d4a53c" opacity=".45"/>
+    </svg>
+   </div></div></div>
+</div>
+<button id="skip" type="button">Skip</button>
+
+<div class="grain"></div>
+<!-- Letterbox bars -->
+<div class="bar t"><span>Waheth.S</span><span id="tc" aria-hidden="true">00:00:00</span></div>
+<div class="bar b"><span class="cap" id="cap" aria-live="polite">Opening titles</span><span id="sc">Scene 1 / 6</span></div>
+
+<main>
+<!-- Scene 1 -->
+<section id="home" data-cap="Opening titles" data-n="1">
+ <div class="wrap">
+  <p class="by">A film by</p>
+  <h1 class="disp">WAHETH<span>.</span>S</h1>
+  <button class="mono" id="mono" aria-label="Monogram W S">
+   <svg viewBox="0 0 84 100" width="84" role="img" aria-hidden="true">
+    <rect x="1" y="1" width="82" height="98" fill="none" stroke="#e8e2d2" stroke-width="2"/>
+    <g fill="#e8e2d2"><rect x="6" y="8" width="7" height="9"/><rect x="6" y="30" width="7" height="9"/><rect x="6" y="52" width="7" height="9"/><rect x="6" y="74" width="7" height="9"/>
+    <rect x="71" y="8" width="7" height="9"/><rect x="71" y="30" width="7" height="9"/><rect x="71" y="52" width="7" height="9"/><rect x="71" y="74" width="7" height="9"/></g>
+    <text x="42" y="46" text-anchor="middle" font-family="Cinzel,Georgia,serif" font-weight="900" font-size="38" fill="#d4a53c">W</text>
+    <text x="42" y="84" text-anchor="middle" font-family="Cinzel,Georgia,serif" font-weight="900" font-size="38" fill="#e8e2d2">S</text>
+   </svg>
+  </button>
+  <!-- EDIT: tagline in your own words -->
+  <p class="tag">[One line about you, in your own words.]</p>
+  <p class="now">Currently: <b>[what you're learning or building right now]</b></p>
+  <div class="btns"><a class="btn p" href="#about">Explore</a><a class="btn" href="#contact">Say hi</a></div>
+ </div>
+</section>
+
+<!-- Scene 2 -->
+<section id="about" data-cap="Scene 2: the story so far" data-n="2">
+ <div class="wrap">
+  <h2 class="disp"><small>Scene two</small>The story<br>so far</h2>
+  <div class="about">
+   <!-- EDIT: write this from your Me-Map answers, first person -->
+   <p>I'm Waheth, a first-year B.Tech student in Information Technology. [Where you're from, and what first got you curious about computers.]</p>
+   <p>[The first thing you ever built or broke, and what it taught you.]</p>
+   <p>[What you're hoping to figure out over the next four years.]</p>
+  </div>
+ </div>
+</section>
+
+<!-- Scene 3 -->
+<section id="skills" data-cap="Scene 3: the crew" data-n="3">
+ <div class="wrap">
+  <h2 class="disp"><small>Scene three</small>The<br>crew</h2>
+  <!-- EDIT: move tools between levels honestly -->
+  <h3>Comfortable with</h3>
+  <ul class="cred">
+   <li><span class="r">Comfortable</span><span class="d"></span><span class="n">[Language / tool]</span></li>
+   <li><span class="r">Comfortable</span><span class="d"></span><span class="n">HTML &amp; CSS</span></li>
+  </ul>
+  <h3>Getting there</h3>
+  <ul class="cred">
+   <li><span class="r">Learning</span><span class="d"></span><span class="n">[Language / tool]</span></li>
+   <li><span class="r">Learning</span><span class="d"></span><span class="n">JavaScript</span></li>
+  </ul>
+  <h3>Just starting</h3>
+  <ul class="cred">
+   <li><span class="r">Curious</span><span class="d"></span><span class="n">[Something on your list]</span></li>
+  </ul>
+ </div>
+</section>
+
+<!-- Scene 4 -->
+<section id="journey" data-cap="Scene 4: three reels" data-n="4">
+ <div class="wrap">
+  <h2 class="disp"><small>Scene four</small>Three<br>reels</h2>
+  <div class="reels">
+   <div class="reel"><h3>Previously</h3><p>[What you've made so far: a project, a small script, even this site. Say what it did and what went wrong.]</p></div>
+   <div class="reel"><h3>Now showing</h3><p>[What you're learning this semester, in plain words.]</p></div>
+   <div class="reel"><h3>Coming soon</h3><p>[What you want to build, and who it would help.]</p></div>
+  </div>
+ </div>
+</section>
+
+<!-- Scene 5 -->
+<section id="beyond" data-cap="Scene 5: the outtakes" data-n="5">
+ <div class="wrap">
+  <h2 class="disp"><small>Scene five</small>The<br>outtakes</h2>
+  <ul class="out">
+   <li><strong>[A hobby]</strong>[Why you love it, in a sentence or two.]</li>
+   <li><strong>[Another one]</strong>[What it looks like when you do it.]</li>
+   <li><strong>[A fun fact]</strong>[Something people don't guess about you.]</li>
+  </ul>
+ </div>
+</section>
+
+<!-- Scene 6 -->
+<section id="contact" data-cap="Scene 6: end credits" data-n="6">
+ <div class="wrap">
+  <h2 class="disp"><small>Scene six</small>End<br>credits</h2>
+  <div class="roll">
+   <a href="mailto:you@example.com"><span>Write to</span>you@example.com</a>
+   <a href="https://www.linkedin.com/in/your-handle" target="_blank" rel="noopener"><span>Find on LinkedIn</span>/in/your-handle</a>
+   <a href="https://github.com/your-handle" target="_blank" rel="noopener"><span>Read the code on GitHub</span>github.com/your-handle</a>
+  </div>
+  <div class="end" aria-hidden="true">FIN</div>
+ </div>
+</section>
+</main>
+
+<!-- Easter egg -->
+<div id="clap" role="dialog" aria-label="Easter egg"><div class="board"><div class="st"></div>
+ <p>Scene: you found it<em>Production</em>WAHETH.S</p><p>Take: 1<em>Director</em>You, apparently</p><p style="border:0">Say "cut" or click to wrap<em>(type "action" again anytime)</em></p></div></div>
+
+<script>
+(function(){
+ var $=function(s){return document.querySelector(s)},$$=function(s){return document.querySelectorAll(s)};
+ var reduce=matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+ /* Opening */
+ var tt=$('#ttl');tt.innerHTML=tt.textContent.split('').map(function(c,i){return '<span class="l"><i style="--i:'+i+'">'+c+'</i></span>'}).join('');
+ var op=$('#open'),skip=$('#skip'),closed=false;
+ function endOpen(){if(closed)return;closed=true;op.classList.add('done')}
+ if(reduce){endOpen()}else{
+  requestAnimationFrame(function(){requestAnimationFrame(function(){op.classList.add('go')})});
+  setTimeout(endOpen,4600);
+ }
+ skip.addEventListener('click',endOpen);
+
+ /* Timecode: counts up while you read */
+ var t0=Date.now(),tc=$('#tc');
+ setInterval(function(){var s=Math.floor((Date.now()-t0)/1000);
+  function p(n){return(n<10?'0':'')+n}
+  tc.textContent=p(Math.floor(s/3600))+':'+p(Math.floor(s/60)%60)+':'+p(s%60)},1000);
+
+ /* Scene captions in the bottom bar */
+ var cap=$('#cap'),sc=$('#sc'),cur='';
+ var io=new IntersectionObserver(function(es){es.forEach(function(e){
+  if(!e.isIntersecting)return;var c=e.target.dataset.cap;if(c===cur)return;cur=c;
+  cap.classList.add('swap');
+  setTimeout(function(){cap.textContent=c;cap.classList.remove('swap');sc.textContent='Scene '+e.target.dataset.n+' / 6'},reduce?0:300);
+ })},{rootMargin:'-45% 0px -50% 0px'});
+ $$('section').forEach(function(s){io.observe(s)});
+
+ /* Scroll progress along the top bar + hero spotlight follows pointer */
+ var tb=$('.bar.t'),hm=$('#home');
+ addEventListener('scroll',function(){var m=document.documentElement.scrollHeight-innerHeight;tb.style.setProperty('--p',(m>0?scrollY/m*100:0)+'%')},{passive:true});
+ if(!reduce)hm.addEventListener('pointermove',function(e){var r=hm.getBoundingClientRect();hm.style.setProperty('--mx',(e.clientX-r.left)+'px');hm.style.setProperty('--my',(e.clientY-r.top)+'px')});
+
+ /* Easter egg: type "action" or tap the monogram 3 times */
+ var clap=$('#clap'),buf='',taps=0,tapT;
+ function show(){clap.classList.remove('on');void clap.offsetWidth;clap.classList.add('on')}
+ function hide(){clap.classList.remove('on')}
+ clap.addEventListener('click',hide);
+ addEventListener('keydown',function(e){
+  if(e.key==='Escape')return hide();
+  buf=(buf+e.key.toLowerCase()).slice(-6);
+  if(buf==='action')show();if(buf.slice(-3)==='cut')hide();
+ });
+ $('#mono').addEventListener('click',function(){
+  taps++;clearTimeout(tapT);tapT=setTimeout(function(){taps=0},900);
+  if(taps>=3){taps=0;show()}
+ });
+})();
+</script>
+</body>
+</html>
